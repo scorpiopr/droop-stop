@@ -4,22 +4,22 @@ program test
     integer :: i,j
     
     
-    write(*,*)"输入矩阵行数"
-    read(*,*) nsize
-    allocate(M_matrix(nsize,nsize),K_matrix(nsize,nsize),                           &
-             C_matrix(nsize,nsize),IS(nsize),JS(nsize),F_matrix(nsize),             &
-             d0_vector(nsize),v0_vector(nsize),a0_vector(nsize))!
+    write(*,*)"输入单元自由度数"
+    read(*,*) N_e
+    allocate(M(N_e,N_e),K(N_e,N_e),                           &
+             C(N_e,N_e),IS(N_e),JS(N_e),F(N_e),             &
+             d0_vector(N_e),v0_vector(N_e),a0_vector(N_e))!
     !a=reshape((/1,2,2,1/),(/2,2/));
     !write(*,*) ""
-    !read(*,*)((M_matrix(i,j),j=1,nsize),i=1,nsize)
+    !read(*,*)((M(i,j),j=1,N_e),i=1,N_e)
     !write(*,*) ""
-    ! read(*,*)((K_matrix(i,j),j=1,nsize),i=1,nsize)
+    ! read(*,*)((K(i,j),j=1,N_e),i=1,N_e)
     !write(*,*) ""
-    !read(*,*)((C_matrix(i,j),j=1,nsize),i=1,nsize)
+    !read(*,*)((C(i,j),j=1,N_e),i=1,N_e)
     
-    M_matrix=RESHAPE((/1d0,0d0,0d0,0d0,0d0,2d0,0d0,0d0,0d0,0d0,3d0,0d0,0d0,0d0,0d0,4d0/),(/4,4/))
-    K_matrix=RESHAPE((/8d2,-8d2,0d0,0d0,-8d2,2.4d3,-1.6d3,0d0,0d0,-1.6d3,4.8d3,-3.2d3,0d0,0d0,-3.2d3,8d3/),(/4,4/))
-    C_matrix=0.05*M_matrix+0.02*K_matrix
+    M=RESHAPE((/1d0,0d0,0d0,0d0,0d0,2d0,0d0,0d0,0d0,0d0,3d0,0d0,0d0,0d0,0d0,4d0/),(/4,4/))
+    K=RESHAPE((/8d2,-8d2,0d0,0d0,-8d2,2.4d3,-1.6d3,0d0,0d0,-1.6d3,4.8d3,-3.2d3,0d0,0d0,-3.2d3,8d3/),(/4,4/))
+    C=0.05*M+0.02*K
      
     write(*,*) "输入初始位移"
     read(*,*) d0_vector
@@ -33,7 +33,7 @@ program test
     
     call Newmark()
     
-    deallocate(M_matrix,K_matrix,C_matrix,IS,JS,F_matrix,d0_vector,v0_vector,a0_vector)
+    deallocate(M,K,C,M_e(:,:),K_e(:,:),C_e(:,:),F_e(:),IS,JS,F,d0_vector,v0_vector,a0_vector)
     
     end
     

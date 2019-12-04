@@ -8,10 +8,10 @@ subroutine Newmark()
 	implicit none 
 	integer :: i
 	real(8) :: b1,b2,b3,b4,b5,b6,t                
-	real(8) ::	K_eff(nsize,nsize), K_inv(nsize,nsize)
-    real(8) :: f_eff(nsize), f_t(nsize)
-    real(8) :: d1(nsize),v1(nsize),a1(nsize)
-    real(8) :: d2(nsize),v2(nsize),a2(nsize),x(nsize),y(nsize)
+	real(8) ::	K_eff(N_e,N_e), K_inv(N_e,N_e)
+    real(8) :: f_eff(N_e), f_t(N_e)
+    real(8) :: d1(N_e),v1(N_e),a1(N_e)
+    real(8) :: d2(N_e),v2(N_e),a2(N_e),x(N_e),y(N_e)
 	real(8) :: gamma,beta 
     
     gamma=0.5;beta=0.25
@@ -22,8 +22,8 @@ subroutine Newmark()
     
     write(*,"(6F10.2)") b1,b2,b3,b4,b5,b6
  
-	K_eff = K_matrix + b1*M_matrix + b4*C_matrix !有效刚度矩阵
-	call BRINV(K_eff,nsize,L,IS,JS) !求有效刚度矩阵的逆矩阵
+	K_eff = K + b1*M + b4*C !有效刚度矩阵
+	call BRINV(K_eff,N_e,L,IS,JS) !求有效刚度矩阵的逆矩阵
     K_inv=K_eff
     
 	d1=d0_vector; v1=v0_vector; a1=a0_vector !
@@ -40,8 +40,8 @@ subroutine Newmark()
         
         x=b1*d1-b2*v1-b3*a1;y=b4*d1-b5*v1-b6*a1
         
-		f_eff=f_t+matmul(M_matrix,x)   & 
-                   +matmul(C_matrix,y) !t+dt
+		f_eff=f_t+matmul(M,x)   & 
+                   +matmul(C,y) !t+dt
 		
         d2=matmul(K_inv,f_eff) 
 		v2=b4*(d2-d1)+b5*v1+b6*a1
