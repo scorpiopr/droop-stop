@@ -1,26 +1,27 @@
-subroutine assemble
+subroutine Assemble()
     !计算总质量和刚度矩阵
     
     use parameter
+    implicit none
     
     integer :: lia
-    real(8),allocatable :: M(:,:),K(:,:),C(:,:),F(:)
-
+    real(8),allocatable :: M_t(:,:),K_t(:,:)
     
-    MassS=zeros(6*(N+1));
-    KS=zeros(6*(N+1));
+    allocate(M_t(N_e*(N+1),N_e*(N+1)),K_t(N_e*(N+1),N_e*(N+1)))
+    
+    call ElementMatrix
 
     do i=1,N
-        lia=6*i-5;
+        lia=6*i-5
     
         !组装质量矩阵
-        MassT=zeros(6*(N+1));
-        MassT(lia:lia+11,lia:lia+11)=eMass;
-        M=M+MassT;
+        M_t=0
+        M_t(lia:lia+N_e*2,lia:lia+N_e*2)=M_e
+        M=M+M_t
 
         !组装刚度矩阵
-        KT=zeros(6*(N+1));
-        KT(lia:lia+11,lia:lia+11)=eK;
-        K=K+KT;
+        K_t=0
+        K_t(lia:lia+N_e*2,lia:lia+N_e*2)=K_e
+        K=K+K_t
     end do
-end subroutine assemble
+end subroutine Assemble

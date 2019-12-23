@@ -29,7 +29,7 @@ subroutine Newmark()
 	d1=d0_vector; v1=v0_vector; a1=a0_vector !
 	t=0.0
     
-	do i=1,nstep 
+	do i=1,Nstep 
 		t=t+dt
         
         if (t<5) then
@@ -40,8 +40,7 @@ subroutine Newmark()
         
         x=b1*d1-b2*v1-b3*a1;y=b4*d1-b5*v1-b6*a1
         
-		f_eff=f_t+matmul(M,x)   & 
-                   +matmul(C,y) !t+dt
+		f_eff=f_t+matmul(M,x)+matmul(C,y) !t+dt
 		
         d2=matmul(K_inv,f_eff) 
 		v2=b4*(d2-d1)+b5*v1+b6*a1
